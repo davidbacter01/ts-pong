@@ -3,14 +3,12 @@
  */
 
 import { Paddle } from '../game_objects/paddle';
+import { getCanvasAndContext } from './utils';
 
-function getCanvasContext() {
-    const canvas = document.createElement('canvas');
-    return canvas.getContext("2d");
-}
 
 function getPaddle() {
-    return new Paddle(getCanvasContext(), {x: 50, y: 100});
+    const [, ctx] = getCanvasAndContext()
+    return new Paddle(ctx as CanvasRenderingContext2D, {x: 50, y: 100}, 'green');
 }
 
 test('paddle not moving, position is same before and after update', () => {
@@ -51,3 +49,15 @@ test('paddle not moving after stop, x and y are the same after update', () => {
     expect(paddle.position.x).toBe(x);
     expect(paddle.position.y).toBe(y);
 });
+
+test('paddle is drawn on canvas', () => {
+    const paddle = getPaddle();
+    const [,ctx] = getCanvasAndContext();
+    let imageData = (ctx as CanvasRenderingContext2D).getImageData(paddle.position.x, paddle.position.y, paddle.size.x, paddle.size.y).data
+    expect(imageData.every((val, _index, _arr) => val === 0)).toBe(true);
+    paddle.draw();
+    imageData = (ctx as CanvasRenderingContext2D).getImageData(paddle.position.x, paddle.position.y, paddle.size.x, paddle.size.y).data
+    // @ts-ignore
+    const events = ctx.__getEvents();
+    expect(events).toMatchSnapshot();
+})

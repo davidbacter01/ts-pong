@@ -64,6 +64,10 @@ export class Paddle {
         this._movingDirection = Direction.Down;
     }
 
+    public stop() {
+        this._movingDirection = Direction.None;
+    }
+
     public update() {
         switch(this._movingDirection) {
             case Direction.None:

@@ -9,9 +9,9 @@ export type Position = {
     y: number;
 }
 
-export type TwoDSize = {
-    x: number;
-    y: number;
+export type Size = {
+    width: number;
+    height: number;
 }
 
 export type Velocity = {
@@ -23,9 +23,9 @@ export class Paddle {
     private _ctx: CanvasRenderingContext2D;
     private _movingDirection: Direction;
     private _color: string;
-    private _size: TwoDSize = {
-        x: 50,
-        y: 150
+    private _size: Size = {
+        width: 50,
+        height: 150
     };
 
     private _position: Position;
@@ -38,7 +38,7 @@ export class Paddle {
     constructor(ctx: CanvasRenderingContext2D, position: Position, color: string) {
         this._ctx = ctx;
         this._movingDirection = Direction.None;
-        this._position = {...position, y: position.y - this._size.y};
+        this._position = {...position, y: position.y - this._size.height};
         this._color = color;
     }
 
@@ -64,6 +64,11 @@ export class Paddle {
 
     public moveUp() {
         this._movingDirection = Direction.Up;
+
+        if (this._position.y - this._velocity.y < 0) {
+            this._position.y = 0;
+            this.stop();
+        }        
     }
 
     public moveDown() {
@@ -89,6 +94,6 @@ export class Paddle {
 
     public draw() {
         this._ctx.fillStyle = this._color;
-        this._ctx.fillRect(this.position.x, this.position.y, this._size.x, this._size.y);
+        this._ctx.fillRect(this.position.x, this.position.y, this._size.width, this._size.height);
     }
 }

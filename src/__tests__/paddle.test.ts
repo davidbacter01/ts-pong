@@ -2,13 +2,13 @@
  * @jest-environment jsdom
  */
 
-import { Paddle } from '../game_objects/paddle';
+import { Paddle, Position } from '../game_objects/paddle';
 import { getCanvasAndContext } from './utils';
 
 
-function getPaddle() {
+function getPaddle(position: Position ={x: 50, y: 100}) {
     const [, ctx] = getCanvasAndContext()
-    return new Paddle(ctx as CanvasRenderingContext2D, {x: 50, y: 100}, 'green');
+    return new Paddle(ctx as CanvasRenderingContext2D, position, 'green');
 }
 
 test('paddle not moving, position is same before and after update', () => {
@@ -53,11 +53,18 @@ test('paddle not moving after stop, x and y are the same after update', () => {
 test('paddle is drawn on canvas', () => {
     const paddle = getPaddle();
     const [,ctx] = getCanvasAndContext();
-    let imageData = (ctx as CanvasRenderingContext2D).getImageData(paddle.position.x, paddle.position.y, paddle.size.x, paddle.size.y).data
+    let imageData = (ctx as CanvasRenderingContext2D).getImageData(paddle.position.x, paddle.position.y, paddle.size.width, paddle.size.height).data
     expect(imageData.every((val, _index, _arr) => val === 0)).toBe(true);
     paddle.draw();
-    imageData = (ctx as CanvasRenderingContext2D).getImageData(paddle.position.x, paddle.position.y, paddle.size.x, paddle.size.y).data
+    imageData = (ctx as CanvasRenderingContext2D).getImageData(paddle.position.x, paddle.position.y, paddle.size.width, paddle.size.height).data
     // @ts-ignore
     const events = ctx.__getEvents();
     expect(events).toMatchSnapshot();
+});
+
+test('paddle can\'t move up outside of canvas bounds', () => {
+    // instantiate Paddle at the top boundary of the canvas
+    const paddle = getPaddle({x: 50, y: 0});
+    paddle.moveUp();
+    expect(paddle.isMovingUp).toBe(false);
 })

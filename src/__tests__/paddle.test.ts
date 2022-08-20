@@ -10,12 +10,15 @@ function getCanvasContext() {
 }
 
 function getPaddle() {
-    return new Paddle(getCanvasContext());
+    return new Paddle(getCanvasContext(), {x: 50, y: 100});
 }
 
 test('paddle not moving', () => {
     const paddle = getPaddle();
+    const initialPosition = paddle.position;
+    paddle.update();
     expect(paddle.isMoving).toBe(false);
+    expect(paddle.position).toBe(initialPosition);
 });
 
 test('paddle is moving up', () => {

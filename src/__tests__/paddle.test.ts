@@ -9,8 +9,17 @@ function getCanvasContext() {
     return canvas.getContext("2d");
 }
 
+function getPaddle() {
+    return new Paddle(getCanvasContext());
+}
+
 test('paddle not moving', () => {
-    const ctx = getCanvasContext();
-    const paddle = new Paddle(ctx);
+    const paddle = getPaddle();
     expect(paddle.isMoving).toBe(false);
 });
+
+test('paddle is moving up', () => {
+    const paddle = getPaddle();
+    paddle.moveUp();
+    expect(paddle.isMovingUp).toBe(true);
+})

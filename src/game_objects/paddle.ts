@@ -20,7 +20,15 @@ export class Paddle {
         return this._movingDirection === Direction.Up;
     }
 
+    public get isMovingDown() {
+        return this._movingDirection === Direction.Down;
+    }
+
     public moveUp() {
         this._movingDirection = Direction.Up;
+    }
+
+    public moveDown() {
+        this._movingDirection = Direction.Down;
     }
 }

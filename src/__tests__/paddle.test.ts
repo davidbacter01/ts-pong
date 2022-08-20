@@ -23,3 +23,9 @@ test('paddle is moving up', () => {
     paddle.moveUp();
     expect(paddle.isMovingUp).toBe(true);
 })
+
+test('paddle is moving down', () => {
+    const paddle = getPaddle();
+    paddle.moveDown();
+    expect(paddle.isMovingDown).toBe(true);
+})

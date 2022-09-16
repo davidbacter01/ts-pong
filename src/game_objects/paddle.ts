@@ -1,3 +1,5 @@
+import { GameObject } from "./interfaces";
+
 export enum Direction {
     Up = 'UP',
     Down = 'DOWN',
@@ -19,7 +21,7 @@ export type Velocity = {
     y: number;
 }
 
-export class Paddle {
+export class Paddle implements GameObject{
     private _ctx: CanvasRenderingContext2D;
     private _movingDirection: Direction;
     private _color: string;
